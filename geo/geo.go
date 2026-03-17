@@ -19,9 +19,9 @@ type CityPopulation struct {
 
 func GetMyLocation(city string) (*GeoData, error) {
 	if city != "" {
-		isCity := CheckCity(city)
+		isCity := checkCity(city)
 		if !isCity {
-			panic("City is incorrect!")
+			return nil, errors.New("City incorrect!")
 		}
 		return &GeoData{
 			City: city,
@@ -45,7 +45,7 @@ func GetMyLocation(city string) (*GeoData, error) {
 	return &geo, nil
 }
 
-func CheckCity(city string) bool {
+func checkCity(city string) bool {
 	postBody, _ := json.Marshal(map[string]string{
 		"city": city,
 	})
