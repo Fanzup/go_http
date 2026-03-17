@@ -18,6 +18,14 @@ func TestGetMyLocation(t *testing.T) {
 		t.Error(err.Error())
 	}
 	if got.City != res.City {
-		t.Errorf("Oops....%v is not %v ", res, got)
+		t.Errorf("Oops....WAIT! %v is not %v ", res, got)
+	}
+}
+
+func TestGetMyLocationNoCity(t *testing.T) {
+	city := "AbobaLOL"
+	_, err := geo.GetMyLocation(city)
+	if err != geo.ErrorNoCity {
+		t.Errorf("Oops....WAIT! %v is not %v ", geo.ErrorNoCity, err)
 	}
 }

@@ -20,6 +20,6 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(geoData)
-	weatherData := weather.GetWeather(*geoData, *format)
+	weatherData, _ := weather.GetWeather(*geoData, *format)
 	fmt.Println(weatherData)
 }

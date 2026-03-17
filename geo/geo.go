@@ -17,11 +17,14 @@ type CityPopulation struct {
 	Error bool `json:"error"`
 }
 
+var ErrorNoCity = errors.New("City incorrect!")
+var ErrorValidCity = errors.New("Not 200!")
+
 func GetMyLocation(city string) (*GeoData, error) {
 	if city != "" {
 		isCity := checkCity(city)
 		if !isCity {
-			return nil, errors.New("City incorrect!")
+			return nil, ErrorNoCity
 		}
 		return &GeoData{
 			City: city,
@@ -33,7 +36,7 @@ func GetMyLocation(city string) (*GeoData, error) {
 		return nil, err
 	}
 	if res.StatusCode != 200 {
-		return nil, errors.New("Not 200!")
+		return nil, ErrorValidCity
 	}
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
