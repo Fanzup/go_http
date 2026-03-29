@@ -1,13 +1,15 @@
 package main
 
 import (
+	"demo/weather_check/internal/auth"
 	"fmt"
 	"net/http"
 )
 
 func main() {
+	// conf := configs.LoadConfig()
 	router := http.NewServeMux()
-	NewHelloHandler(router)
+	auth.NewHelloHandler(router)
 
 	server := http.Server{
 		Addr:    ":8081",
