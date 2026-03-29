@@ -7,12 +7,17 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type AuthConfig struct {
+	Secret string
+}
+
 type DbConfig struct {
 	Dsn string
 }
 
 type Config struct {
-	Db DbConfig
+	Db   DbConfig
+	Auth AuthConfig
 }
 
 func LoadConfig() *Config {
@@ -23,6 +28,9 @@ func LoadConfig() *Config {
 	return &Config{
 		Db: DbConfig{
 			Dsn: os.Getenv("DSN"),
+		},
+		Auth: AuthConfig{
+			Secret: os.Getenv("TOKEN"),
 		},
 	}
 }
