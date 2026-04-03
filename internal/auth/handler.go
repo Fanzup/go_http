@@ -2,11 +2,10 @@ package auth
 
 import (
 	"demo/weather_check/configs"
+	"demo/weather_check/packages/request"
 	"demo/weather_check/packages/response"
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/mail"
 )
 
 type AuthHandlerDeps struct {
@@ -26,23 +25,15 @@ func NewHelloHandler(router *http.ServeMux, deps AuthHandlerDeps) {
 }
 
 func (handler *AuthHandler) Login() http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 		// read body
-		var payload LoginRequest
-		err := json.NewDecoder(req.Body).Decode(&payload)
+		body, err := request.HandleBody[LoginRequest](&w, r)
 		if err != nil {
-			response.JsonResponse(w, err.Error(), 402)
-		}
-		if payload.Email == "" || payload.Password == "" {
-			response.JsonResponse(w, "Email or Password incorrect!", 403)
 			return
 		}
-		_, err = mail.ParseAddress(payload.Email)
-		if err != nil {
-			response.JsonResponse(w, "Email or Password incorrect!", 403)
-			return
-		}
-		fmt.Println(payload)
+		request.IsValid(body)
+
+		fmt.Println(body)
 		data := LoginResponse{
 			Token: "123",
 		}
@@ -50,7 +41,12 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 	}
 }
 func (handler *AuthHandler) Register() http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("Register")
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := request.HandleBody[RegisterRequest](&w, r)
+		if err != nil {
+			return
+		}
+		request.IsValid(body)
+		fmt.Println(body)
 	}
 }
