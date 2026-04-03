@@ -2,6 +2,7 @@ package auth
 
 import (
 	"demo/weather_check/configs"
+	"demo/weather_check/packages/response"
 	"fmt"
 	"net/http"
 )
@@ -26,9 +27,12 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(handler.Config.Auth.Secret)
 		fmt.Println("Login")
+		data := LoginResponse{
+			Token: "123",
+		}
+		response.JsonResponse(w, data, 200)
 	}
 }
-
 func (handler *AuthHandler) Register() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		fmt.Println("Register")
