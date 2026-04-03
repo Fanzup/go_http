@@ -3,8 +3,10 @@ package auth
 import (
 	"demo/weather_check/configs"
 	"demo/weather_check/packages/response"
+	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/mail"
 )
 
 type AuthHandlerDeps struct {
@@ -25,8 +27,22 @@ func NewHelloHandler(router *http.ServeMux, deps AuthHandlerDeps) {
 
 func (handler *AuthHandler) Login() http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println(handler.Config.Auth.Secret)
-		fmt.Println("Login")
+		// read body
+		var payload LoginRequest
+		err := json.NewDecoder(req.Body).Decode(&payload)
+		if err != nil {
+			response.JsonResponse(w, err.Error(), 402)
+		}
+		if payload.Email == "" || payload.Password == "" {
+			response.JsonResponse(w, "Email or Password incorrect!", 403)
+			return
+		}
+		_, err = mail.ParseAddress(payload.Email)
+		if err != nil {
+			response.JsonResponse(w, "Email or Password incorrect!", 403)
+			return
+		}
+		fmt.Println(payload)
 		data := LoginResponse{
 			Token: "123",
 		}
