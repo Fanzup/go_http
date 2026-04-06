@@ -3,12 +3,14 @@ package main
 import (
 	"demo/weather_check/configs"
 	"demo/weather_check/internal/auth"
+	"demo/weather_check/packages/db"
 	"fmt"
 	"net/http"
 )
 
 func main() {
 	conf := configs.LoadConfig()
+	_ = db.NewDb(conf)
 	router := http.NewServeMux()
 	auth.NewHelloHandler(router, auth.AuthHandlerDeps{
 		Config: conf,
