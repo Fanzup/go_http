@@ -5,6 +5,7 @@ import (
 	"demo/weather_check/internal/auth"
 	"demo/weather_check/internal/auth/link"
 	"demo/weather_check/packages/db"
+	"demo/weather_check/packages/middleware"
 	"fmt"
 	"net/http"
 )
@@ -28,7 +29,7 @@ func main() {
 
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: router,
+		Handler: middleware.Logging(router),
 	}
 
 	fmt.Println("Server is listening on port 8081!")
