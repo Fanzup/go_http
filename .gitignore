@@ -1,2 +1,5 @@
 launch.json
 /.vscode
+/postgres-data
+.env
+/.env
